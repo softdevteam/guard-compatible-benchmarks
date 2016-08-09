@@ -23,11 +23,36 @@ def get_metadata():
 def make_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument("-n", help="number of iterations", default=50)
+    parser.add_argument("--count-executed-lines", help="count the lines executed by the benchmark", action='store_true')
     return parser
+
+def count_lines(func):
+    import sys
+    import collections
+
+    count = collections.defaultdict(int)
+
+    def trace_calls(frame, event, arg):
+        if event != 'line':
+            return trace_calls
+        lineno = frame.f_lineno
+        code = frame.f_code
+        filename = code.co_filename
+        count[filename, lineno] += 1
+        return trace_calls
+    print "counting lines"
+    sys.settrace(trace_calls)
+    func()
+    sys.settrace(None)
+    print count
 
 def main(func):
     parser = make_parser()
     args = parser.parse_args()
+
+    if args.count_executed_lines:
+        count_lines(func)
+        return
 
     times = []
     for i in range(int(args.n)):
