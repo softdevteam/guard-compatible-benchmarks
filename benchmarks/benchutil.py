@@ -11,6 +11,8 @@ import signal
 
 from collections import deque, defaultdict
 
+RESULTS = "RESULTS"
+
 now = datetime.datetime.now()
 
 def get_metadata():
@@ -44,7 +46,11 @@ def count_lines(func):
     sys.settrace(trace_calls)
     func()
     sys.settrace(None)
-    print count
+    print RESULTS
+    print dict(count)
+
+def extract_extra_info(d, last_d):
+    pass # for now
 
 def main(func):
     parser = make_parser()
@@ -55,13 +61,17 @@ def main(func):
         return
 
     times = []
+    last_d = None
     for i in range(int(args.n)):
         t1 = time.time()
         func()
         t2 = time.time()
-        times.append(t2 - t1)
-    print "RESULTS"
-    print times
+        d = {"runtime": t2 - t1, "iteration": i}
+        extract_extra_info(d, last_d)
+        times.append(d)
+        last_d = d
+    print RESULTS
+    print json.dumps(times)
 
 # ____________________________________________________________
 def avg(l):
@@ -224,7 +234,7 @@ class CmdlineJob(Job):
 
     def parse_results(self, results):
         lines = results.splitlines()
-        index = lines.index("TIMES")
+        index = lines.rindex(RESULTS)
         if index == -1:
             raise BenchError("Wrong format of results: %s" % result)
-        return [float(line) for line in lines[index + 1:]]
+        return json.loads("\n".join(lines[index + 1:]))
