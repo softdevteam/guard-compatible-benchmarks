@@ -252,7 +252,7 @@ class CmdlineJob(Job):
 
     def parse_results(self, results):
         lines = results.splitlines()
-        index = lines.rindex(RESULTS)
+        index = lines.index(RESULTS)
         if index == -1:
             raise BenchError("Wrong format of results: %s" % result)
         return json.loads("\n".join(lines[index + 1:]))
