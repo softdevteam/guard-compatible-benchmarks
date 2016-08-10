@@ -6,7 +6,8 @@
 import sys
 import os
 
-parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+thisdir = os.path.dirname(os.path.abspath(__file__))
+parentdir = os.path.dirname(thisdir)
 networkxdir = os.path.join(parentdir, "external", "networkx-1.11")
 sys.path.append(networkxdir)
 decoratordir = os.path.join(parentdir, "external", "decorator-4.0.10", "src")
@@ -15,8 +16,10 @@ sys.path.append(decoratordir)
 import benchutil
 import networkx
 
+
+
 def func():
-    g = networkx.read_graphml("pgp.xml")
+    g = networkx.read_graphml(os.path.join(thisdir, "pgp.xml"))
     networkx.shortest_path_length(g, 'n0')
     networkx.pagerank(g, alpha=0.85, tol=1e-3, max_iter=10000000)
     networkx.core.core_number(g)
