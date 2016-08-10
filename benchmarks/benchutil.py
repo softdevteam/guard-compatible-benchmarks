@@ -11,6 +11,11 @@ import signal
 
 from collections import deque, defaultdict
 
+try:
+    import pypyjit
+except ImportError:
+    pypyjit = None
+
 RESULTS = "RESULTS"
 
 now = datetime.datetime.now()
@@ -49,8 +54,21 @@ def count_lines(func):
     print RESULTS
     print dict(count)
 
-def extract_extra_info(d, last_d):
-    pass # for now
+def extra_info():
+    if pypyjit is None:
+        return {}
+    result = dict(asm_memory=pypyjit.get_stats_asmmemmgr()[1])
+    snap = pypyjit.get_stats_snapshot()
+    result.update(snap.counters)
+    for name, tim in snap.counter_times.items():
+        result[name + "_TIME"] = tim
+    return result
+
+def extract_extra_info(d, info1, info2):
+    if pypyjit is None:
+        return
+    for key, value in info2.iteritems():
+        d[key] = value - info1[key]
 
 def main(func):
     parser = make_parser()
@@ -61,17 +79,17 @@ def main(func):
         return
 
     times = []
-    last_d = None
     for i in range(int(args.n)):
+        info1 = extra_info()
         t1 = time.time()
         func()
         t2 = time.time()
+        info2 = extra_info()
         d = {"runtime": t2 - t1, "iteration": i}
-        extract_extra_info(d, last_d)
+        extract_extra_info(d, info1, info2)
         times.append(d)
-        last_d = d
     print RESULTS
-    print json.dumps(times)
+    print json.dumps(times, indent=4)
 
 # ____________________________________________________________
 def avg(l):
