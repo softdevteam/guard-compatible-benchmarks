@@ -72,11 +72,11 @@ def extra_info():
         result[name + "_TIME"] = tim
     return result
 
-def extract_extra_info(d, info1, info2):
+def extract_extra_info(results, info1, info2):
     if pypyjit is None:
         return
     for key, value in info2.iteritems():
-        d[key] = value - info1[key]
+        results[key].append(value - info1[key])
 
 def main(func):
     parser = make_parser()
@@ -86,18 +86,17 @@ def main(func):
         count_lines(func)
         return
 
-    times = []
+    results = defaultdict(list)
     for i in range(int(args.n)):
         info1 = extra_info()
         t1 = time.time()
         func()
         t2 = time.time()
         info2 = extra_info()
-        d = {"runtime": t2 - t1, "iteration": i}
-        extract_extra_info(d, info1, info2)
-        times.append(d)
+        extract_extra_info(results, info1, info2)
+        results["runtime"].append(t2 - t1)
     print RESULTS
-    print json.dumps(times, indent=4)
+    print json.dumps(results, indent=4)
 
 # ____________________________________________________________
 def avg(l):
