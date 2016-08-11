@@ -14,7 +14,7 @@ import benchutil
 TIMEOUT = 60 * 60.0 # one hour
 
 def add_benchmarks(jobs, interpreter, args):
-    for name in ["jittest", "pypy-translate", "pypy-interp", "nx"]:
+    for name in ["jittest", "pypy-translate", "pypy-interp", "nx", "bm_sympy"]:
         cmdline = "%s benchmarks/%s.py -n %s" % (interpreter, name, args.inprocess)
         jobs.append(benchutil.CmdlineJob(name, "bench", int(args.n), cmdline, timeout=TIMEOUT))
 
