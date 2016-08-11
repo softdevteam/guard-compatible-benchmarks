@@ -1,12 +1,9 @@
-import sys
-import os
+import benchutil
 
-parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-pypydir = os.path.join(parentdir, "pypy")
-sys.path.append(pypydir)
+benchutil.add_external_path("", "pypy")
+
 
 import pypy
-import benchutil
 import os
 import time
 

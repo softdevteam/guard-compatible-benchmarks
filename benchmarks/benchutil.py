@@ -20,6 +20,14 @@ RESULTS = "RESULTS"
 
 now = datetime.datetime.now()
 
+thisdir = os.path.dirname(os.path.abspath(__file__))
+topleveldir = os.path.dirname(thisdir)
+
+def add_external_path(dirnames, toplevel="external"):
+    p = os.path.join(topleveldir, toplevel, dirnames)
+    sys.path.append(p)
+
+
 def get_metadata():
     return dict(
         version=sys.version,

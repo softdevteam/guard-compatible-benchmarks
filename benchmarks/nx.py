@@ -3,20 +3,11 @@
 # Richters O, Peixoto TP (2011) Trust Transitivity in Social Networks. PLoS ONE 6(4): e18384.
 # doi 10.1371/journal.pone.0018384
 
-import sys
-import os
-
-thisdir = os.path.dirname(os.path.abspath(__file__))
-parentdir = os.path.dirname(thisdir)
-networkxdir = os.path.join(parentdir, "external", "networkx-1.11")
-sys.path.append(networkxdir)
-decoratordir = os.path.join(parentdir, "external", "decorator-4.0.10", "src")
-sys.path.append(decoratordir)
-
 import benchutil
+benchutil.add_external_path("networkx-1.11")
+benchutil.add_external_path("decorator-4.0.10/src")
+
 import networkx
-
-
 
 def func():
     g = networkx.read_graphml(os.path.join(thisdir, "pgp.xml"))
