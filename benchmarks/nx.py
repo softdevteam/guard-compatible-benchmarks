@@ -4,6 +4,7 @@
 # doi 10.1371/journal.pone.0018384
 
 import benchutil
+import os
 benchutil.add_external_path("networkx-1.11")
 benchutil.add_external_path("decorator-4.0.10/src")
 
