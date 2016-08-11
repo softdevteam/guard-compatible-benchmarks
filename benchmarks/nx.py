@@ -11,7 +11,7 @@ benchutil.add_external_path("decorator-4.0.10/src")
 import networkx
 
 def func():
-    g = networkx.read_graphml(os.path.join(thisdir, "pgp.xml"))
+    g = networkx.read_graphml(os.path.join(benchutil.thisdir, "pgp.xml"))
     networkx.shortest_path_length(g, 'n0')
     networkx.pagerank(g, alpha=0.85, tol=1e-3, max_iter=10000000)
     networkx.core.core_number(g)
