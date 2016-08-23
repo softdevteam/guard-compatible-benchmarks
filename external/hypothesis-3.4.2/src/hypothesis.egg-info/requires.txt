@@ -1,0 +1,32 @@
+enum34
+
+[:python_version == '2.7']
+enum34
+
+[:python_version == '3.3']
+enum34
+
+[all]
+django>=1.7
+fake-factory>=0.5.2,<=0.5.3
+numpy>=1.9.0
+pytest>=2.7.0
+pytz
+pytz
+
+[datetime]
+pytz
+
+[django]
+pytz
+django>=1.7
+fake-factory>=0.5.2,<=0.5.3
+
+[fakefactory]
+fake-factory>=0.5.2,<=0.5.3
+
+[numpy]
+numpy>=1.9.0
+
+[pytest]
+pytest>=2.7.0
